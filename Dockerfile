@@ -18,14 +18,15 @@ RUN pacman -Sy --noconfirm ncurses bash-completion rxvt-unicode-terminfo
 RUN pacman -Sy --noconfirm zsh
 
 # Add an user to build and run tests
-RUN useradd -G users,wheel -m -s /bin/bash devuser
+RUN useradd -G users,wheel -m -s /usr/bin/zsh devuser
 
 # Add the workspace dir
 RUN mkdir -p /home/workspace
-ADD rootfs.tar.gz
+ADD rootfs.tar.gz /
 RUN pacman -Sy --noconfirm vita-toolchain vita-toolchain-hostlibs
 
 WORKDIR /home/workspace
 USER devuser
-CMD ["/bin/bash"]
+CMD ["/usr/bin/zsh"]
+EXPOSE 1000-2000
 
