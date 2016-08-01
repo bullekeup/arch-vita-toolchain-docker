@@ -1,0 +1,31 @@
+#
+# vita-toolchain container based on Archlinux
+# based on devel image w/ packer installed
+# 
+# This is a development image, not a production one !
+#
+
+FROM base/devel
+MAINTAINER Axel Moinet <bullekeup@gmail.com>
+
+# Update pacman
+RUN pacman -Sy --noconfirm pacman package-query && pacman-db-upgrade
+RUN pacman -S --noconfirm archlinux-keyring
+
+# Update the system
+RUN pacman -Syu --noconfirm base-devel git rsync strace curl ca-certificates ca-certificates-utils
+RUN pacman -Sy --noconfirm ncurses bash-completion rxvt-unicode-terminfo
+RUN pacman -Sy --noconfirm zsh
+
+# Add an user to build and run tests
+RUN useradd -G users,wheel -m -s /bin/bash devuser
+
+# Add the workspace dir
+RUN mkdir -p /home/workspace
+ADD rootfs.tar.gz
+RUN pacman -Sy --noconfirm vita-toolchain vita-toolchain-hostlibs
+
+WORKDIR /home/workspace
+USER devuser
+CMD ["/bin/bash"]
+
