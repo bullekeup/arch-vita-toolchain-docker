@@ -24,6 +24,7 @@ RUN useradd -G users,wheel -m -s /usr/bin/zsh devuser
 RUN mkdir -p /home/workspace
 ADD rootfs.tar.gz /
 RUN pacman -Sy --noconfirm vita-toolchain vita-toolchain-hostlibs
+RUN pacman -Scc --noconfirm && rm -f /var/cache/pacman/pkg/*
 
 WORKDIR /home/workspace
 USER devuser
